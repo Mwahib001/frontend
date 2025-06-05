@@ -1,33 +1,114 @@
-import ItemCard from "./itemsCard";
+"use client";
 
-type CategorySectionProps = {
-  category: any;
-  baseUrl: string;
-  selectedItem: any;
-  setSelectedItem: (item: any) => void;
-  isLast: boolean;
+import ItemCard from "./itemsCard";
+import DealsSlideshow from "./dealsSlideshow";
+
+type Item = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: {
+    url: string;
+    name: string;
+    formats?: {
+      medium?: {
+        url: string;
+      };
+    };
+  };
 };
 
-export default function CategorySection({ category, baseUrl, selectedItem, setSelectedItem, isLast }: CategorySectionProps) {
+type Category = {
+  id: number;
+  name: string;
+  items: Item[];
+};
+
+type CategorySectionProps = {
+  category: Category;
+  baseUrl: string;
+  selectedItem: Item | null;
+  setSelectedItem: (item: Item | null) => void;
+  isLast: boolean;
+  deals?: Item[];
+  setDialogOpen: (open: boolean) => void;
+};
+
+const CategoryTitle = ({ name }: { name: string }) => (
+  <h2 className="text-2xl sm:text-3xl md:text-4xl text-white font-bold mb-4 sm:mb-6 px-4 sm:px-6 md:px-8 lg:px-12">
+    {name}
+  </h2>
+);
+
+const CategoryGrid = ({ 
+  items, 
+  baseUrl, 
+  selectedItem, 
+  setSelectedItem, 
+  setDialogOpen
+}: { 
+  items: Item[];
+  baseUrl: string;
+  selectedItem: Item | null;
+  setSelectedItem: (item: Item | null) => void;
+  setDialogOpen: (open: boolean) => void;
+}) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4 sm:px-6 md:px-8 lg:px-12">
+    {items.length > 0 ? (
+      items.map((item) => (
+        <ItemCard
+          key={item.id}
+          item={item}
+          baseUrl={baseUrl}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          setDialogOpen={setDialogOpen}
+        />
+      ))
+    ) : (
+      <div className="col-span-full text-center py-8">
+        <p className="text-white text-lg">No items available in this category.</p>
+      </div>
+    )}
+  </div>
+);
+
+export default function CategorySection({
+  category,
+  baseUrl,
+  selectedItem,
+  setSelectedItem,
+  isLast,
+  deals,
+  setDialogOpen,
+}: CategorySectionProps) {
   return (
-    <div key={category.id} id={`cat-${category.id}`} className="mb-4">
-      <h2 className="text-2xl font-bold text-white px-70 mb-3 mt-3">{category.name}</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 px-75 gap-4">
-        {category?.items?.length > 0 ? (
-          category.items.map((item: any) => (
-            <ItemCard
-              key={item.id}
-              item={item}
+    <section
+      id={`category-${category.id}`}
+      className={`py-4 sm:py-6 ${!isLast ? "border-b border-[#2a2a2a]" : ""}`}
+    >
+      <div className="container mx-auto">
+        {deals && deals.length > 0 && (
+          <div id="deals-section" className="mb-8">
+            <CategoryTitle name="Deals" />
+            <DealsSlideshow
+              deals={deals}
               baseUrl={baseUrl}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />
-          ))
-        ) : (
-          <div className="text-gray-400">No items in this category.</div>
+          </div>
         )}
+        <CategoryTitle name={category.name} />
+        <CategoryGrid
+          items={category.items}
+          baseUrl={baseUrl}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          setDialogOpen={setDialogOpen}
+        />
       </div>
-      {!isLast && <br />}
-    </div>
+    </section>
   );
 }
