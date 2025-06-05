@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Item } from "@/types";
 import ItemCard from "./itemsCard";
+import type { Item } from "./itemsCard";
 
 interface DealsSlideshowProps {
   deals: Item[];
@@ -13,6 +13,7 @@ interface DealsSlideshowProps {
 
 export default function DealsSlideshow({ deals, baseUrl, selectedItem, setSelectedItem }: DealsSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const itemsPerPage = 3;
 
   const nextSlide = () => {
@@ -58,6 +59,7 @@ export default function DealsSlideshow({ deals, baseUrl, selectedItem, setSelect
                 baseUrl={baseUrl}
                 selectedItem={selectedItem}
                 setSelectedItem={setSelectedItem}
+                setDialogOpen={setDialogOpen}
               />
             </div>
           ))}

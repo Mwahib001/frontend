@@ -13,7 +13,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 
-type Item = {
+export type Item = {
   id: number;
   name: string;
   description: string;
