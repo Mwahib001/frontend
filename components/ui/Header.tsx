@@ -72,7 +72,7 @@ const BannerCarousel = ({ banners }: { banners: Banner[] }) => {
           }`}
         >
           <Image
-            src={`http://localhost:1337${banner.bannerimage.url}`}
+            src={banner.bannerimage.url}
             alt={banner.name}
             fill
             className="object-cover"
@@ -92,7 +92,7 @@ export default function Header({ dialogOpen = false }: { dialogOpen?: boolean })
     const fetchBanners = async () => {
       try {
         const response = await fetch(
-          "http://localhost:1337/api/catogaries/x65q47hrd2vdrtc32nktjcfm?populate[banners][populate][bannerimage][fields][0]=url"
+          "https://genuine-presence-df48c40f5e.strapiapp.com/api/catogaries/vc4kp69nhaesqg5zct8w5tjw?populate[banners][populate][bannerimage][fields][0]=url"
         );
         const data = await response.json();
         if (data.data && data.data.banners) {

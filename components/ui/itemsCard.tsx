@@ -165,25 +165,6 @@ export default function ItemCard({
     };
   }, [dropdownOpen]);
 
-  useEffect(() => {
-    const fetchAddOns = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:1337/api/catogaries?populate[items][populate]=image"
-        );
-        const data = await response.json();
-        const addOnsCategory = data.data.find((cat: any) => cat.name === "Add ones");
-        if (addOnsCategory) {
-          setAddOns(addOnsCategory.items || []);
-        }
-      } catch (error) {
-        console.error("Error fetching add-ons:", error);
-      }
-    };
-
-    fetchAddOns();
-  }, []);
-
   const handleAddOnIncrement = (id: number) => {
     setAddOnsQty((prev) => ({
       ...prev,
@@ -212,7 +193,7 @@ export default function ItemCard({
             <div className="relative w-full aspect-[16/16]">
               <Image
                 priority
-                src={`${baseUrl}${item.image.url}`}
+                src={item.image.url}
                 alt={item.image.name}
                 fill
                 className="object-cover rounded-t-lg"
@@ -246,8 +227,8 @@ export default function ItemCard({
               <Image
                 src={
                   item.image?.formats?.medium?.url
-                    ? `${baseUrl}${item.image.formats.medium.url}`
-                    : `${baseUrl}${item.image.url}`
+                    ? item.image.formats.medium.url
+                    : item.image.url
                 }
                 alt={item.name}
                 width={1000}

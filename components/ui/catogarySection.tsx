@@ -33,6 +33,7 @@ type CategorySectionProps = {
   isLast: boolean;
   deals?: Item[];
   setDialogOpen: (open: boolean) => void;
+  dealsBannerUrl?: string | null;
 };
 
 const CategoryTitle = ({ name }: { name: string }) => (
@@ -82,6 +83,7 @@ export default function CategorySection({
   isLast,
   deals,
   setDialogOpen,
+  dealsBannerUrl,
 }: CategorySectionProps) {
   return (
     <section
@@ -97,6 +99,7 @@ export default function CategorySection({
               baseUrl={baseUrl}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
+              bannerUrl={dealsBannerUrl} // pass banner url
             />
           </div>
         )}

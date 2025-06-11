@@ -33,14 +33,22 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [deals, setDeals] = useState<Item[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const baseUrl = "http://localhost:1337";
+  const [dealsBannerUrl, setDealsBannerUrl] = useState<string | null>(null);
+  const baseUrl = "https://genuine-presence-df48c40f5e.strapiapp.com";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch deals first
+        // Fetch deals banner image
+        const bannerRes = await fetch(
+          "https://genuine-presence-df48c40f5e.strapiapp.com/api/upload/files/68"
+        );
+        const bannerData = await bannerRes.json();
+        setDealsBannerUrl(bannerData.url);
+
+        // Fetch deals
         const dealsRes = await fetch(
-          "http://localhost:1337/api/catogaries?filters[name][$eq]=Deals&populate[items][populate]=image"
+          "https://genuine-presence-df48c40f5e.strapiapp.com/api/catogaries?filters[name][$eq]=Deals&populate[items][populate]=image"
         );
         const dealsData = await dealsRes.json();
         const dealsCategory = dealsData.data[0];
@@ -48,7 +56,7 @@ export default function Home() {
 
         // Then fetch other categories
         const categoriesRes = await fetch(
-          "http://localhost:1337/api/catogaries?populate[items][populate]=image&filters[name][$notIn][0]=Add ones&filters[name][$notIn][1]=banner&filters[name][$notIn][2]=Deals"
+          "https://genuine-presence-df48c40f5e.strapiapp.com/api/catogaries?populate[items][populate]=image&filters[name][$notIn][0]=Add ones&filters[name][$notIn][1]=banner&filters[name][$notIn][2]=Deals"
         );
         const categoriesData = await categoriesRes.json();
         setCategories(categoriesData.data || []);
@@ -80,6 +88,7 @@ export default function Home() {
               setSelectedItem={setSelectedItem}
               isLast={idx === categories.length - 1}
               deals={idx === 0 ? deals : undefined}
+              dealsBannerUrl={idx === 0 ? dealsBannerUrl : undefined} // pass banner url
               setDialogOpen={setDialogOpen}
             />
           ))}

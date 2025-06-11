@@ -9,9 +9,16 @@ interface DealsSlideshowProps {
   baseUrl: string;
   selectedItem: Item | null;
   setSelectedItem: (item: Item | null) => void;
+  bannerUrl?: string | null;
 }
 
-export default function DealsSlideshow({ deals, baseUrl, selectedItem, setSelectedItem }: DealsSlideshowProps) {
+export default function DealsSlideshow({
+  deals,
+  baseUrl,
+  selectedItem,
+  setSelectedItem,
+  bannerUrl,
+}: DealsSlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const itemsPerPage = 3;
@@ -40,8 +47,17 @@ export default function DealsSlideshow({ deals, baseUrl, selectedItem, setSelect
 
   return (
     <div className="relative mb-8">
-      <h2 className="text-2xl font-bold text-white mb-6 mt-3 px-10 sm:px-16 lg:px-20">Deals</h2>
-      
+      {bannerUrl && (
+        <div className="mb-6">
+          <img
+            src={bannerUrl}
+            alt="Deals Banner"
+            className="w-full h-auto rounded-lg object-cover"
+            style={{ maxHeight: 320, objectFit: "cover" }}
+          />
+        </div>
+      )}
+
       <div className="relative">
         <button
           onClick={prevSlide}
@@ -75,4 +91,4 @@ export default function DealsSlideshow({ deals, baseUrl, selectedItem, setSelect
       </div>
     </div>
   );
-} 
+}
