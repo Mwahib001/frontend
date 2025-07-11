@@ -25,6 +25,8 @@ type Category = {
 };
 
 export default async function HomePage() {
+  // Define baseUrl from env or fallback
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://genuine-presence-df48c40f5e.strapiapp.com";
   try {
     // Fetch deals banner
     const dealsBannerUrl = process.env.NEXT_PUBLIC_DEALS_BANNER_URL;
