@@ -24,21 +24,18 @@ type Category = {
   items: Item[];
 };
 
-const baseUrl = "https://genuine-presence-df48c40f5e.strapiapp.com";
-
 export default async function HomePage() {
   try {
     // Fetch deals banner
-    const bannerRes = await fetch(`${baseUrl}/api/upload/files/68`, {
-      cache: "no-store",
-    });
+    const dealsBannerUrl = process.env.NEXT_PUBLIC_DEALS_BANNER_URL;
+    if (!dealsBannerUrl) throw new Error("DEALS_BANNER_URL is not set");
+    const bannerRes = await fetch(dealsBannerUrl, { next: { revalidate: 600 } });
     const bannerData = await bannerRes.json();
-    const dealsBannerUrl = bannerData.url;
 
     // Fetch deals
     const dealsRes = await fetch(
       `${baseUrl}/api/catogaries?filters[name][$eq]=Deals&populate[items][populate]=image`,
-      { cache: "no-store" }
+      { next: { revalidate: 600 } }
     );
     const dealsData = await dealsRes.json();
     const deals = dealsData?.data[0]?.items || [];
@@ -46,7 +43,7 @@ export default async function HomePage() {
     // Fetch all categories except "Deals", "Add ones", "banner"
     const categoriesRes = await fetch(
       `${baseUrl}/api/catogaries?populate[items][populate]=image&filters[name][$notIn]=Add%20Ones&filters[name][$notIn]=banner&filters[name][$notIn]=Deal`,
-      { cache: "no-store" }
+      { next: { revalidate: 600 },}
     );
     const categoriesData = await categoriesRes.json();
     const categories: Category[] = categoriesData.data || [];
