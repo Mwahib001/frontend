@@ -3,13 +3,19 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 // import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { buildConfig } from 'payload'
+import { Users } from './collections/Users'
+import { Media } from './collections/Media'
+import { Products } from './collections/Products'
+
+import { Home } from './globals/Home'
 
 export default buildConfig({
   // If you'd like to use Rich Text, pass your editor here
   editor: lexicalEditor(),
 
   // Define and configure your collections in this array
-  collections: [],
+  globals: [Home],
+  collections: [Users, Media, Products],
 
   // Your Payload secret - should be a complex and secure string, unguessable
   secret: process.env.PAYLOAD_SECRET || '',
